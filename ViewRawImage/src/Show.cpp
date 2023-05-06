@@ -82,7 +82,7 @@ namespace show {
 
 			if (ImGui::BeginMenu("Version"))
 			{
-				ImGui::MenuItem("Version:1.0.0");
+				ImGui::MenuItem("Version:1.0.1");
 
 				ImGui::EndMenu();
 			}
@@ -257,7 +257,7 @@ namespace show {
 				float Framerate = (float)*ctx::GetFPSPtr();
 				if (Framerate > io.Framerate)
 					Framerate = io.Framerate;
-				ImGui::Text("Real frame rate: %.3f ms/frame (%.1f FPS)", 1000.0f / Framerate, Framerate);
+				ImGui::Text("Total Frames:,Real frame rate: %.3f ms/frame (%.1f FPS)", ctx::GetFrameTotal(), 1000.0f / Framerate, Framerate);
 			}
 
 			if (ImGui::Button("play"))

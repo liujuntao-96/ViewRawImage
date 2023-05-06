@@ -377,6 +377,19 @@ extern "C" {
 		{ 2, 1, 8 },
 	 }
 	 },
+		  [PIX_FMT_R10G10B10A2] = {
+	 .name = "R10G10B10A2",
+	 .nb_components = 4,
+	 .log2_chroma_w = 0,
+	 .log2_chroma_h = 0,
+	 .flags = PIX_FMT_FLAG_RGB,
+	 .comp = {
+		 { 0, 4, 10 },
+		 { 0, 4, 10 },
+		 { 0, 4, 10 },
+		 { 0, 4, 2 },
+	  }
+	  },
 	};
 
 

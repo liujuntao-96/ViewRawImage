@@ -55,6 +55,7 @@ namespace ctx {
 		std::ifstream file;
 		int64_t fileSize = 0;
 		int64_t fileOffset = 0;
+		int64_t frameTotal = 0;
 		bool playFlag = false;
 		bool playMode = false;
 		std::chrono::system_clock::time_point lastTime;
@@ -161,6 +162,12 @@ namespace ctx {
 	{
 		CHECK_CONTEXT();
 		return &gAPPContext->playMode;
+	}
+
+	int64_t GetFrameTotal()
+	{
+		CHECK_CONTEXT();
+		return gAPPContext->frameTotal;
 	}
 
 	void OpenFile(const std::string& path)
@@ -328,6 +335,10 @@ namespace ctx {
 			*dxgiFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
 			*step = 4;
 			break;
+		case PIX_FMT_R10G10B10A2:
+			*dxgiFormat = DXGI_FORMAT_R10G10B10A2_UNORM;
+			*step = 4;
+			break;
 		case PIX_FMT_NB:
 			assert(0 && "swapChannels:format err.");
 			break;
@@ -389,6 +400,7 @@ namespace ctx {
 			auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - gAPPContext->lastTime);
 			if (elapsedTime.count() > (int64_t)((1.0 / gAPPContext->fps) * 1000)) {
 				uint64_t frameTotal = gAPPContext->fileSize / size;
+				gAPPContext->frameTotal = frameTotal;
 				uint64_t frameOffset = frameTotal * gAPPContext->progressBar / 100;
 				uint64_t temp = 0;
 				if (gAPPContext->progressBarFlag) {

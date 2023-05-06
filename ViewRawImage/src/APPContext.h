@@ -14,6 +14,8 @@ namespace ctx {
 
 	bool* GetAutoResizeFlagPtr();
 
+	int64_t GetFrameTotal();
+
 	int* GetScalingPtr();
 
 	void* GetBuffer();

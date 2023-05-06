@@ -34,6 +34,7 @@ extern "C" {
 		PIX_FMT_P010LSB,
 		PIX_FMT_I010,
 		PIX_FMT_BGR888Planar,
+		PIX_FMT_R10G10B10A2,
 		PIX_FMT_NB
 	};
 
