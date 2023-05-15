@@ -8,11 +8,13 @@
 #include "APPContext.h"
 #include "util/Pixdesc.h"
 #include "imGuiExt/imgui_memory_editor.h"
+#include "ConvertFile.h"
 
 namespace show {
 	struct ShowContext {
 		bool show_main_menu_bar;
 		bool show_set_image_window;
+		bool show_convert_window;
 		bool show_dockspace;
 		bool show_image_window;
 		bool show_set_image_view_window;
@@ -46,6 +48,11 @@ namespace show {
 				{
 					ctx.show_set_image_window = true;
 				}
+				if (ImGui::MenuItem("open convert window"))
+				{
+					ctx.show_convert_window = true;
+				}
+
 				if (ImGui::MenuItem("open view image window"))
 				{
 					ctx.show_set_image_view_window = true;
@@ -82,7 +89,7 @@ namespace show {
 
 			if (ImGui::BeginMenu("Version"))
 			{
-				ImGui::MenuItem("Version:1.0.1");
+				ImGui::MenuItem("Version:1.0.2");
 
 				ImGui::EndMenu();
 			}
@@ -224,6 +231,47 @@ namespace show {
 		}
 		ImGui::SameLine();
 		HelpMarker("Please select (TILED_LINEAR) if you do not understand.");
+		ImGui::Begin("convert image", &ctx.show_convert_window, ImGuiWindowFlags_HorizontalScrollbar);
+		const char* targetFormatNameArray[PIX_FMT_NB];
+		for (int i = 0; i < PIX_FMT_NB; i++)
+		{
+			const PixFmtDescriptor* desc = pix_fmt_desc_get((enum PixelFormat)i);
+			targetFormatNameArray[i] = desc->name;
+		}
+		ImGui::SetNextItemWidth(150);
+		static int targetFormat = 0;
+		ImGui::Combo("target format", &targetFormat, targetFormatNameArray, IM_ARRAYSIZE(targetFormatNameArray));
+
+		const char* targetTiledNameArray[TILED_NB];
+		for (int i = 0; i < TILED_NB; i++)
+		{
+			const TiledDescriptor* desc = tiled_desc_get((enum Tiled)i);
+			targetTiledNameArray[i] = desc->name;
+		}
+		ImGui::SetNextItemWidth(150);
+		static int targetTiled = 0;
+		ImGui::Combo("target tiled", &targetTiled, targetTiledNameArray, IM_ARRAYSIZE(targetTiledNameArray));
+		if (ImGui::Button("convert and save file")) {
+			CFileDialog dlg(false);
+			if (dlg.DoModal() != IDOK)
+			{
+				AfxMessageBox(_T("保存文件失败！"));
+			}
+			else
+			{
+				std::string path(CT2A(dlg.GetPathName().GetString()));
+
+				convertFile::FileConvert::FileParam src = { .path = ctx::GetFilePath(),
+					.w = ctx::GetWidth(), .h = ctx::GetHeight(),
+					.format = (enum PixelFormat)*ctx::GetFormatPtr(),.tiled = (enum Tiled)*ctx::GetTiledPtr() };
+				convertFile::FileConvert::FileParam dst = { .path = path ,.w = ctx::GetWidth(), .h = ctx::GetHeight(),
+				.format = (enum PixelFormat)targetFormat,.tiled = (enum Tiled)targetTiled };
+				convertFile::FileConvert fileC(src, dst);
+				fileC.Convert();
+				AfxMessageBox(_T("转换完成"));
+			}
+		}
+		ImGui::End();
 		ImGui::EndDisabled();
 		ImGui::End();
 
@@ -336,6 +384,7 @@ namespace show {
 			ctx.show_set_image_window = true;
 			ctx.show_dockspace = true;
 			ctx.show_set_image_view_window = true;
+			ctx.show_convert_window = true;
 			ctx.show_image_window = true;
 			ctx.show_image_data_window = true;
 			init = true;

@@ -218,13 +218,12 @@ namespace ctx {
 			convert::R5G5B5A1ToB5G5R5A1(w, h, buffer);
 			break;
 		case PIX_FMT_RGBA4444:
-			*dxgiFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
+			*dxgiFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
 			*step = 4;
 			break;
 		case PIX_FMT_BGR565:
 			*dxgiFormat = DXGI_FORMAT_B5G6R5_UNORM;
 			*step = 2;
-			convert::BGR565ToBGR565(w, h, buffer);
 			break;
 		case PIX_FMT_BGRA8888:
 			*dxgiFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
@@ -258,6 +257,7 @@ namespace ctx {
 		case PIX_FMT_RGB565:
 			*dxgiFormat = DXGI_FORMAT_B5G6R5_UNORM;
 			*step = 2;
+			convert::BGR565ToBGR565(w, h, buffer);
 			break;
 		case PIX_FMT_ABGR8888:
 			*dxgiFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
