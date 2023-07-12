@@ -362,6 +362,60 @@ namespace convert {
 		}
 	}
 
+	void RGB24ToBGRA(uint8_t* bgrp, uint8_t* argb, int w, int h)
+	{
+		for (int y = 0; y < h; y++)
+		{
+			for (int x = 0; x < w; x++)
+			{
+				argb[3] = 255;
+				argb[2] = bgrp[0];
+				argb[1] = bgrp[1];
+				argb[0] = bgrp[2];
+				bgrp += 3;
+				argb += 4;
+			}
+		}
+	}
+
+	void RGBPToBGRA(uint8_t* bgrp, uint8_t* argb, int w, int h)
+	{
+		uint8_t* b, * g, * r;
+		r = bgrp;
+		g = bgrp + w * h;
+		b = bgrp + w * h * 2;
+		for (int y = 0; y < h; y++)
+		{
+			for (int x = 0; x < w; x++)
+			{
+				argb[3] = 255;
+				argb[2] = r[0];
+				argb[1] = g[0];
+				argb[0] = b[0];
+				r++;
+				g++;
+				b++;
+				argb += 4;
+			}
+		}
+	}
+
+	void BGR24ToBGRA(uint8_t* bgrp, uint8_t* argb, int w, int h)
+	{
+		for (int y = 0; y < h; y++)
+		{
+			for (int x = 0; x < w; x++)
+			{
+				argb[3] = 255;
+				argb[2] = bgrp[2];
+				argb[1] = bgrp[1];
+				argb[0] = bgrp[0];
+				bgrp += 3;
+				argb += 4;
+			}
+		}
+	}
+
 
 	static void converseLinear2Tiled(void* tiledBuf, void* linearBuf, uint32_t step, uint32_t planeWidth, uint32_t planeHeight, uint32_t tiledWH)
 	{
@@ -1829,6 +1883,57 @@ namespace convert {
 				r++;
 				g++;
 				b++;
+				argb += 4;
+			}
+		}
+	}
+
+	void BGRAToRGB888P(uint8_t* argb, int w, int h, uint8_t* bgrp)
+	{
+		uint8_t* b, * g, * r;
+		r = bgrp;
+		g = bgrp + w * h;
+		b = bgrp + w * h * 2;
+		for (int y = 0; y < h; y++)
+		{
+			for (int x = 0; x < w; x++)
+			{
+				*b = argb[0];
+				*g = argb[1];
+				*r = argb[2];
+				r++;
+				g++;
+				b++;
+				argb += 4;
+			}
+		}
+	}
+
+	void BGRAToRGB24(uint8_t* argb, int w, int h, uint8_t* bgrp)
+	{
+		for (int y = 0; y < h; y++)
+		{
+			for (int x = 0; x < w; x++)
+			{
+				bgrp[2] = argb[0];
+				bgrp[1] = argb[1];
+				bgrp[0] = argb[2];
+				bgrp += 3;
+				argb += 4;
+			}
+		}
+	}
+
+	void BGRAToBGR24(uint8_t* argb, int w, int h, uint8_t* bgrp)
+	{
+		for (int y = 0; y < h; y++)
+		{
+			for (int x = 0; x < w; x++)
+			{
+				bgrp[0] = argb[0];
+				bgrp[1] = argb[1];
+				bgrp[2] = argb[2];
+				bgrp += 3;
 				argb += 4;
 			}
 		}

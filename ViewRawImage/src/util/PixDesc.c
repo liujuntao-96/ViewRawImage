@@ -390,6 +390,47 @@ extern "C" {
 		 { 0, 4, 2 },
 	  }
 	  },
+
+		  [PIX_FMT_RGB24] = {
+ .name = "RGB24",
+ .nb_components = 3,
+ .log2_chroma_w = 0,
+ .log2_chroma_h = 0,
+ .flags = PIX_FMT_FLAG_RGB,
+ .comp = {
+	 { 0, 3, 8 },
+	 { 0, 3, 8 },
+	 { 0, 3, 8 },
+  }
+	  },
+
+		  [PIX_FMT_BGR24] = {
+.name = "BGR24",
+.nb_components = 3,
+.log2_chroma_w = 0,
+.log2_chroma_h = 0,
+.flags = PIX_FMT_FLAG_RGB,
+.comp = {
+	{ 0, 3, 8 },
+	{ 0, 3, 8 },
+	{ 0, 3, 8 },
+ }
+	  },
+
+
+		 [PIX_FMT_RGB888Planar] = {
+.name = "RGB888Planar",
+.nb_components = 3,
+.log2_chroma_w = 0,
+.log2_chroma_h = 0,
+.flags = PIX_FMT_FLAG_RGB | PIX_FMT_FLAG_PLANAR,
+.comp = {
+	{ 0, 1, 8 },
+	{ 1, 1, 8 },
+	{ 2, 1, 8 },
+ }
+	 },
+
 	};
 
 

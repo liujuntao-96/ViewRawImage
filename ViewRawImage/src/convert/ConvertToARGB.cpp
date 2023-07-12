@@ -110,6 +110,15 @@ namespace convert {
 		case PIX_FMT_BGR888Planar:
 			convert::BGRPToBGRA(data[0], argb_data, w, h);
 			break;
+		case PIX_FMT_RGB888Planar:
+			convert::RGBPToBGRA(data[0], argb_data, w, h);
+			break;
+		case PIX_FMT_RGB24:
+			convert::RGB24ToBGRA(data[0], argb_data, w, h);
+			break;
+		case PIX_FMT_BGR24:
+			convert::BGR24ToBGRA(data[0], argb_data, w, h);
+			break;
 		default:
 			assert(0 && "format is unsupported.");
 			break;
@@ -220,6 +229,15 @@ namespace convert {
 			break;
 		case PIX_FMT_R10G10B10A2:
 			convert::BGRAToR10G10B10A2(w, h, argb_data, yuv_data);
+			break;
+		case PIX_FMT_RGB888Planar:
+			convert::BGRAToRGB888P(argb_data, w, h, yuv_data);
+			break;
+		case PIX_FMT_RGB24:
+			convert::BGRAToRGB24(argb_data, w, h, yuv_data);
+			break;
+		case PIX_FMT_BGR24:
+			convert::BGRAToBGR24(argb_data, w, h, yuv_data);
 			break;
 		default:
 			assert(0 && "format is unsupported.");

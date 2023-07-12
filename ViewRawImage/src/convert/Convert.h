@@ -95,6 +95,12 @@ namespace convert {
 
 	void BGRPToBGRA(uint8_t* bgrp, uint8_t* argb, int w, int h);
 
+	void RGBPToBGRA(uint8_t* bgrp, uint8_t* argb, int w, int h);
+
+	void RGB24ToBGRA(uint8_t* bgrp, uint8_t* argb, int w, int h);
+
+	void BGR24ToBGRA(uint8_t* bgrp, uint8_t* argb, int w, int h);
+
 	void ConvertTiled(int w, int h, enum Tiled tiled, enum PixelFormat pix_fmt, uint8_t* buffer, uint8_t* tiledBuffer);
 	void ConvertFromTiled(int w, int h, enum Tiled tiled, enum PixelFormat pix_fmt, uint8_t* buffer, uint8_t* tiledBuffer);
 
@@ -256,4 +262,7 @@ namespace convert {
 	void BGRA8888ToP010MSB(const uint8_t* src_data, int src_width, int src_height, uint8_t* dst_data);
 	void BGRAToI010(unsigned char* RgbBuf, int w, int h, unsigned char* yuvBuf);
 	void BGRAToBGR888P(uint8_t* argb, int w, int h, uint8_t* bgrp);
+	void BGRAToRGB888P(uint8_t* argb, int w, int h, uint8_t* bgrp);
+	void BGRAToRGB24(uint8_t* argb, int w, int h, uint8_t* bgrp);
+	void BGRAToBGR24(uint8_t* argb, int w, int h, uint8_t* bgrp);
 };

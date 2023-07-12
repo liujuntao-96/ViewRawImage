@@ -335,8 +335,20 @@ namespace ctx {
 			*dxgiFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
 			*step = 4;
 			break;
+		case PIX_FMT_RGB888Planar:
+			*dxgiFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
+			*step = 4;
+			break;
 		case PIX_FMT_R10G10B10A2:
 			*dxgiFormat = DXGI_FORMAT_R10G10B10A2_UNORM;
+			*step = 4;
+			break;
+		case PIX_FMT_RGB24:
+			*dxgiFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
+			*step = 4;
+			break;
+		case PIX_FMT_BGR24:
+			*dxgiFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
 			*step = 4;
 			break;
 		case PIX_FMT_NB:
@@ -444,7 +456,7 @@ namespace ctx {
 
 		swapChannels(gAPPContext->texBuffer, gAPPContext->format, &gAPPContext->dxgiFormat, &gAPPContext->step);
 
-		if (!(desc->flags & PIX_FMT_FLAG_RGB) || gAPPContext->format == PIX_FMT_BGR888Planar || desc->flags & PIX_FMT_FLAG_4444) {
+		if (!(desc->flags & PIX_FMT_FLAG_RGB) || gAPPContext->format == PIX_FMT_BGR888Planar || gAPPContext->format == PIX_FMT_RGB888Planar || desc->flags & PIX_FMT_FLAG_4444 || gAPPContext->format == PIX_FMT_BGR24 || gAPPContext->format == PIX_FMT_RGB24) {
 			uint8_t* buffer = convertTiled ? gAPPContext->tiledBuffer : gAPPContext->buffer;
 			if (gAPPContext->convertBufferSize != gAPPContext->width * gAPPContext->height * 4) {
 

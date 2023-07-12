@@ -89,7 +89,7 @@ namespace show {
 
 			if (ImGui::BeginMenu("Version"))
 			{
-				ImGui::MenuItem("Version:1.0.2");
+				ImGui::MenuItem("Version:1.0.3");
 
 				ImGui::EndMenu();
 			}
