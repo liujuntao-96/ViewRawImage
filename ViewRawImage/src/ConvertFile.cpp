@@ -56,7 +56,11 @@ namespace convertFile {
 		temp_buffer = (uint8_t*) new char[temp_size];
 		dst_buffer = (uint8_t*) new char[dst_size];
 		dst_bufferT = (uint8_t*) new char[dst_size];
-
+		memset(src_buffer, 0, src_size);
+		memset(src_bufferT, 0, src_size);
+		memset(temp_buffer, 0, temp_size);
+		memset(dst_buffer, 0, dst_size);
+		memset(dst_bufferT, 0, dst_size);
 		//image_fill_arrays(src_data, srclinesize, src_buffer, src_.format, src_.w, src_.h, 1);
 		//image_fill_arrays(temp_data, templinesize, temp_buffer, PIX_FMT_BGRA8888, src_.w, src_.h, 1);
 		//image_fill_arrays(dst_data, dstlinesize, dst_buffer, dst_.format, src_.w, src_.h, 1);
@@ -68,12 +72,13 @@ namespace convertFile {
 				convert::ConvertTiled(src_.w, src_.h, src_.tiled, src_.format, p, src_bufferT);
 				p = src_bufferT;
 			}
+			if (src_.format != dst_.format) {
+				convert::ConvertToARGB(p, temp_buffer, src_.w, src_.h, src_.format);
+				p = temp_buffer;
 
-			convert::ConvertToARGB(p, temp_buffer, src_.w, src_.h, src_.format);
-			p = temp_buffer;
-
-			convert::ConvertFromARGB(p, dst_buffer, src_.w, src_.h, dst_.format);
-			p = dst_buffer;
+				convert::ConvertFromARGB(p, dst_buffer, src_.w, src_.h, dst_.format);
+				p = dst_buffer;
+			}
 			if (dst_.tiled != TILED_LINEAR)
 			{
 				convert::ConvertFromTiled(src_.w, src_.h, dst_.tiled, dst_.format, p, dst_bufferT);

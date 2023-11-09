@@ -417,22 +417,23 @@ namespace convert {
 	}
 
 
-	static void converseLinear2Tiled(void* tiledBuf, void* linearBuf, uint32_t step, uint32_t planeWidth, uint32_t planeHeight, uint32_t tiledWH)
+	static void converseLinear2Tiled(void* tiledBuf, void* linearBuf, uint32_t step, uint32_t planeWidth, uint32_t planeHeight, uint32_t tiledWH, int copy_size)
 	{
 		uint8_t* plinear = (uint8_t*)linearBuf;
 		uint8_t* ptiled = (uint8_t*)tiledBuf;
 		int h = planeHeight;
-		int w = planeWidth;
+		int w = planeWidth * step;
 		int a = tiledWH;
+
 		for (int y = 0; y < h; y += a)
 		{
-			for (int x = 0; x < w; x += a)
+			for (int x = 0; x < w; x += copy_size)
 			{
 				for (int m = 0; m < a; m++)
 				{
-					plinear = (uint8_t*)linearBuf + (((w * (y + m)) + x) * step);
-					memcpy(ptiled, plinear, a * step);
-					ptiled += a * step;
+					plinear = (uint8_t*)linearBuf + (((w * (y + m)) + x));
+					memcpy(ptiled, plinear, copy_size);
+					ptiled += copy_size;
 				}
 			}
 		}
@@ -458,23 +459,22 @@ namespace convert {
 			{
 				height = h >> pixDesc->log2_chroma_h;
 			}
-			converseLinear2Tiled(dataTiled[i], data[i], pixDesc->comp[i].step, linesize[i] / pixDesc->comp[i].step, height, align);
+			converseLinear2Tiled(dataTiled[i], data[i], pixDesc->comp[i].step, linesize[i] / pixDesc->comp[i].step, height, align, pixDesc->comp[0].step * align);
 		}
 	}
 
-	static void converseTiled2Linear(void* tiledBuf, void* linearBuf, uint32_t step, uint32_t planeWidth, uint32_t planeHeight, uint32_t tiledWH)
+	static void converseTiled2Linear(void* tiledBuf, void* linearBuf, uint32_t step, uint32_t planeWidth, uint32_t planeHeight, uint32_t tiledWH, int copy_size)
 	{
 		uint8_t* pTiled, * pLinear;
-		uint32_t offset = 0, i, x = 0, y = 0, lineSize, totalSize, copy_size;
+		uint32_t offset = 0, i, x = 0, y = 0, lineSize, totalSize;
 
 		lineSize = planeWidth * step;
 		totalSize = lineSize * planeHeight;
-		copy_size = step * tiledWH;
 
 		while (offset < totalSize)
 		{
 			pTiled = (uint8_t*)tiledBuf + offset;
-			pLinear = (uint8_t*)linearBuf + y * lineSize + x * step;
+			pLinear = (uint8_t*)linearBuf + y * lineSize + x;
 
 			for (i = 0; i < tiledWH; i++)
 			{
@@ -483,8 +483,8 @@ namespace convert {
 				offset += copy_size;
 			}
 
-			x += tiledWH;
-			if (x >= planeWidth) {
+			x += copy_size;
+			if (x >= lineSize) {
 				y += tiledWH;
 				x = 0;
 			}
@@ -510,7 +510,7 @@ namespace convert {
 			{
 				height = h >> pixDesc->log2_chroma_h;
 			}
-			converseTiled2Linear(data[i], dataTiled[i], pixDesc->comp[i].step, linesize[i] / pixDesc->comp[i].step, height, align);
+			converseTiled2Linear(data[i], dataTiled[i], pixDesc->comp[i].step, linesize[i] / pixDesc->comp[i].step, height, align, pixDesc->comp[0].step * align);
 		}
 	}
 
