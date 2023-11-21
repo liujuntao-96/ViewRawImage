@@ -89,7 +89,7 @@ namespace show {
 
 			if (ImGui::BeginMenu("Version"))
 			{
-				ImGui::MenuItem("Version:1.0.4");
+				ImGui::MenuItem("Version:1.0.5");
 
 				ImGui::EndMenu();
 			}
@@ -135,9 +135,11 @@ namespace show {
 		std::smatch matchResult;
 
 		if (std::regex_search(filename, matchResult, regexStr)) {
-			ctx::SetWidth(stoi(matchResult[1]));
-			ctx::SetHeight(stoi(matchResult[2]));
-			return true;
+			if (stoi(matchResult[1]) < 7680 && stoi(matchResult[2]) < 4320) {
+				ctx::SetWidth(stoi(matchResult[1]));
+				ctx::SetHeight(stoi(matchResult[2]));
+				return true;
+			}
 		}
 		regexStr = "1080[pP]";
 		if (std::regex_search(filename, matchResult, regexStr)) {
